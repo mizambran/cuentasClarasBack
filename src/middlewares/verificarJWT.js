@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 
 const verificarJWT = (req, res, next) => {
     try {
-        const authHeader = req.headers.autorization
+        const authHeader = req.headers.authorization
         if(!authHeader || !authHeader.startsWith('Bearer ')){
             return res.status(401).json({mensaje:"La petición no tiene token"})
         }
