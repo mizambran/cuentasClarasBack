@@ -8,7 +8,7 @@ const router = Router()
 
 router.route('/').get(listarUsuarios).post(usuarioValidacion, crearUsuario)
 router.route('/login').post(login)
-router.route('/paginado').get(usuarioPaginado)
-router.route('/:id').get(buscarUsuario).put(usuarioValidacion, editarUsuario).delete(eliminarUsuario)
+//router.route('/paginado').get(usuarioPaginado)
+router.route('/:id').get(buscarUsuario).put(usuarioValidacion, editarUsuario)
 
 export default router
