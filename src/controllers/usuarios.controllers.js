@@ -1,6 +1,6 @@
 import { isValidObjectId } from 'mongoose'
 import Usuario from '../models/usuario.js'
-import { genSaltSync, hashSync } from 'bcryptjs'
+import { compareSync, genSaltSync, hashSync } from 'bcryptjs'
 
 
 
@@ -89,6 +89,31 @@ export const eliminarUsuario = async(req, res) => {
         res.status(500).json({mensaje:"No se pudo eliminar el usuario"})
     }
 }
+
+export const login = async(req, res) => {
+    try {
+        const {email, password} = req.body
+        const usuarioEncontrado = await Usuario.findOne({email})
+        if(!usuarioEncontrado){
+            return res.status(400).json({mensaje:"Email inválido"})
+        }
+        const esPasswordValida = compareSync(password, usuarioEncontrado.password)
+        if(!esPasswordValida){
+            return res.status(400).json({mensaje:"Contraseña inválida"})
+        }
+        res.status(200).json({
+            mensaje:"Login exitoso!",
+            nombre:usuarioEncontrado.nombre,
+            email:usuarioEncontrado.email,
+            rol:usuarioEncontrado.rol,
+            id:usuarioEncontrado._id
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({mensaje:"Error al intentar iniciar sesión"})
+    }
+}
+
 
 export const usuarioPaginado = async(req, res) => {
     try {
