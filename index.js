@@ -6,4 +6,8 @@ const server = new Server()
 
 server.app.use("/api", router)
 
-server.listen()
+if(process.env.NODE_ENV !== 'production'){
+    server.listen()
+}
+
+export default server.app
