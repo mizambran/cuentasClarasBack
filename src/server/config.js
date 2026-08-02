@@ -12,7 +12,7 @@ export default class Server {
     }
     middlewares(){
         this.app.use(cors({
-            origin:'https://cuentasclarasarg.netlify.app/',
+            origin:'https://cuentasclarasarg.netlify.app',
             credentials:true
         })),
         this.app.use(express.json()),
