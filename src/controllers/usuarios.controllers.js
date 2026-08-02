@@ -93,7 +93,7 @@ export const editarUsuario = async(req, res) => {
 export const login = async(req, res) => {
     try {
         const {email, password} = req.body
-        const usuarioEncontrado = await Usuario.findOne({email})
+        const usuarioEncontrado = await Usuario.findOne({email}).select('+password')
         if(!usuarioEncontrado){
             return res.status(400).json({mensaje:"Email inválido"})
         }
