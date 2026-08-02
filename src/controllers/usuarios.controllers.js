@@ -1,10 +1,10 @@
 import { isValidObjectId } from 'mongoose'
 import Usuario from '../models/usuario.js'
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs'
+import generarJWT from '../middlewares/generarJWT.js'
 
 
-
-export const listarUsuarios = async(req, res) => {
+/* export const listarUsuarios = async(req, res) => {
     try {
         const usuarios = await Usuario.find()
         res.status(200).json(usuarios)
@@ -12,9 +12,9 @@ export const listarUsuarios = async(req, res) => {
         console.error(error)
         res.status(500).json({mensaje:"No se pudo listar los usuarios"})
     }
-}
+} */
 
-export const buscarUsuario = async(req, res) => {
+/* export const buscarUsuario = async(req, res) => {
     try {
         const id = req.params.id 
         if(!isValidObjectId(id)){
@@ -29,7 +29,7 @@ export const buscarUsuario = async(req, res) => {
         console.error(error)
         res.status(500).json({mensaje:"No se pudo buscar el usuario"})
     }
-}
+} */
 
 export const crearUsuario = async(req, res) => {
     try {
@@ -73,7 +73,7 @@ export const editarUsuario = async(req, res) => {
     }
 }
 
-export const eliminarUsuario = async(req, res) => {
+/* export const eliminarUsuario = async(req, res) => {
     try {
         const id = req.params.id
         if(!isValidObjectId(id)){
@@ -88,7 +88,7 @@ export const eliminarUsuario = async(req, res) => {
         console.error(error)
         res.status(500).json({mensaje:"No se pudo eliminar el usuario"})
     }
-}
+} */
 
 export const login = async(req, res) => {
     try {
@@ -101,12 +101,14 @@ export const login = async(req, res) => {
         if(!esPasswordValida){
             return res.status(400).json({mensaje:"Contraseña inválida"})
         }
+        const token = generarJWT(usuarioEncontrado._id, usuarioEncontrado.rol)
         res.status(200).json({
             mensaje:"Login exitoso!",
             nombre:usuarioEncontrado.nombre,
             email:usuarioEncontrado.email,
             rol:usuarioEncontrado.rol,
-            id:usuarioEncontrado._id
+            id:usuarioEncontrado._id,
+            token: token
         })
     } catch (error) {
         console.error(error)
@@ -115,7 +117,7 @@ export const login = async(req, res) => {
 }
 
 
-export const usuarioPaginado = async(req, res) => {
+/* export const usuarioPaginado = async(req, res) => {
     try {
         let page = req.query.page || 1
         let limit = req.query.page || 10
@@ -135,4 +137,4 @@ export const usuarioPaginado = async(req, res) => {
         console.error(error)
         res.status(500).json({mensaje:"No se pudo paginar los usuarios"})
     }
-}
+} */
