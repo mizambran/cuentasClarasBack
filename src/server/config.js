@@ -11,7 +11,10 @@ export default class Server {
         this.middlewares()
     }
     middlewares(){
-        this.app.use(cors()),
+        this.app.use(cors({
+            origin:'https://cuentasclarasarg.netlify.app/',
+            credentials:true
+        })),
         this.app.use(express.json()),
         this.app.use(morgan("dev"))
         const __dirname = dirname(fileURLToPath(import.meta.url))
