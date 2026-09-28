@@ -1,5 +1,4 @@
 import { Router } from "express";
-import validacionUsuario from '../middlewares/usuarioValidacion.js'
 import  {  crearUsuario, editarUsuario,  login } from '../controllers/usuarios.controllers.js'
 import usuarioValidacion from "../middlewares/usuarioValidacion.js";
 

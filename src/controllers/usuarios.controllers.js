@@ -1,5 +1,5 @@
 import { isValidObjectId } from 'mongoose'
-import Usuario from '../models/usuario.js'
+import Usuario from '../models/usuario.model.js'
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs'
 import generarJWT from '../middlewares/generarJWT.js'
 
