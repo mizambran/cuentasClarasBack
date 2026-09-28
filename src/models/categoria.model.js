@@ -2,6 +2,11 @@ import mongoose, { Schema } from "mongoose";
 
 
 const categoriaEsquema = new Schema({
+    usuario:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'usuario',
+        required:true
+    },
     nombre:{
         type:String,
         minLength: 3,
@@ -13,9 +18,9 @@ const categoriaEsquema = new Schema({
         enum:['Ingreso', 'Gasto'],
         required:true
     },
-    usuario:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'usuario',
+    concepto:{
+        type:String,
+        enum:['Fijo','Variable','Extra'],
         required:true
     }
 }, {

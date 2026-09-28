@@ -29,6 +29,11 @@ const transaccionEsquema = new Schema({
         type:String,
         required:true,
         default:"Sin especificar"
+    },
+    estado:{
+        type:String,
+        enum:['Pendiente', 'Completado'],
+        default:'Pendiente'
     }
 }, {
     timestamps:true
