@@ -1,4 +1,4 @@
-import mongoose, { Schema, SchemaType } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const transaccionEsquema = new Schema({
     usuario:{
@@ -25,10 +25,13 @@ const transaccionEsquema = new Schema({
         type:Number,
         required:true
     },
+    cuenta:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'cuenta',
+        required:true
+    },
     descripcion:{
-        type:String,
-        required:true,
-        default:"Sin especificar"
+        type:String
     },
     estado:{
         type:String,
