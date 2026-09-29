@@ -19,10 +19,10 @@ export const crearCategoria = async(req, res) => {
         return res.status(400).json({mensaje:"Ya existe una categoría con este nombre"})
     }
     const nuevaCategoria = new Categoria({
+        usuario:idUsuario,
         nombre,
         tipo,
-        concepto,
-        usuario:idUsuario
+        concepto
     })
 
     await nuevaCategoria.save()
