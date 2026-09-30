@@ -1,5 +1,6 @@
 import { isValidObjectId } from "mongoose"
 import Categoria from "../models/categoria.model.js"
+import Transaccion from "../models/transaccion.model.js"
 
 
 
@@ -69,7 +70,7 @@ export const editarCategoria = async(req, res) => {
         const categoriaActualizada = await Categoria.findOneAndUpdate({_id:idCategoria, usuario:idUsuario}, req.body, {runValidators:true, returnDocument:'after'})
 
         res.status(200).json({ 
-            mensaje: "¡Categoría editada con éxito!",
+            mensaje: "Categoría editada con éxito!",
             categoria: categoriaActualizada 
         });
 
@@ -87,6 +88,12 @@ export const eliminarCategoria = async(req, res) => {
         const idCategoria = req.params.id
         if(!isValidObjectId(idCategoria)){
             return res.status(400).json({mensaje:"El id es inválido"})
+        }
+        const idUsuario = req.idUsuario
+        // antes de borrar validamos si tiene movimientos
+        const tieneOperaciones = await Transaccion.findOne({categoria:idCategoria, usuario:idUsuario})
+        if(tieneOperaciones){
+            return res.status(400).json({mensaje:`No se puede eliminar la categoría ya que tiene asociados movimientos`})
         }
         const existeCategoria = await Categoria.findOneAndDelete({_id:idCategoria, usuario:req.idUsuario})
         if(!existeCategoria){

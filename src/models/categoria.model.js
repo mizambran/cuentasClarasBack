@@ -22,6 +22,11 @@ const categoriaEsquema = new Schema({
         type:String,
         enum:['Fijo','Variable','Extra'],
         required:true
+    },
+    activo:{
+        type:Boolean,
+        required:true,
+        default:true
     }
 }, {
     timestamps:true
