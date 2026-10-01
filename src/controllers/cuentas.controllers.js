@@ -1,6 +1,6 @@
 import { isValidObjectId } from "mongoose"
 import Cuenta from "../models/cuenta.model.js"
-
+import Transaccion from '../models/transaccion.model.js'
 
 export const listarCuentas = async(req, res) => {
     try {
@@ -92,3 +92,24 @@ export const editarCuenta = async(req, res) => {
     }
 }
 
+export const eliminarCuenta = async(req, res) => {
+    try {
+        const idCuenta = req.params.id
+        if(!isValidObjectId(idCuenta)){
+            return res.status(400).json({mensaje:"El id es inválido"})
+        }
+        const idUsuario = req.idUsuario
+        const tieneOperaciones = await Transaccion.findOne({usuario:idUsuario, cuenta:idCuenta})
+        if(tieneOperaciones){
+            return res.status(400).json({mensaje:"La cuenta tiene movimientos asociados"})
+        }
+        const cuentaEncontrada = await Cuenta.findOne({_id:idCuenta, usuario:idUsuario})
+        if(!cuentaEncontrada){
+            return res.status(404).json({mensaje:"No se encontró la cuenta que intentas eliminar"})
+        }
+        res.status(200).json({mensaje:"Se eliminó la cuenta con éxito!"})
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({mensaje:"Ocurrió un error, no se pudo eliminar la cuenta"})
+    }
+}
