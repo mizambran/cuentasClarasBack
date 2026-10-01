@@ -4,6 +4,7 @@ import resultadoValidacion from "./resultadoValidacion.js";
 
 
 const categoriaValidacion = [
+    
     body("nombre")
     .trim()
     .notEmpty().withMessage("Nombre es un campo obligatorio")
@@ -11,11 +12,15 @@ const categoriaValidacion = [
     
     body("tipo")
     .trim()
-    .notEmpty().withMessage("Tipo es un dato obligatorio"),
+    .notEmpty().withMessage("Tipo es un dato obligatorio")
+    .isIn(['Ingreso', 'Gasto'])
+    .withMessage("Tipo debe ser INGRESO o GASTO"),
 
     body("concepto")
     .trim()
-    .notEmpty().withMessage("Concepto es un campo obligatorio"),
+    .notEmpty().withMessage("Concepto es un campo obligatorio")
+    .isIn(['Fijo','Variable','Extra'])
+    .withMessage("Concepto puede ser FIJO, VARIABLE o EXTRA"),
     
     resultadoValidacion
 ]
