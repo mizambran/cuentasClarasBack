@@ -23,6 +23,7 @@ const transaccionEsquema = new Schema({
     },
     monto:{
         type:Number,
+        min:0,
         required:true
     },
     cuenta:{
