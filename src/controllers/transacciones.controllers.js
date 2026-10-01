@@ -67,7 +67,7 @@ export const crearTransaccion = async (req, res) => {
   }
 };
 
-export const editarTrasaccion = async (req, res) => {
+export const editarTransaccion = async (req, res) => {
   try {
     const idTransaccion = req.params.id;
     if (!isValidObjectId(idTransaccion)) {
