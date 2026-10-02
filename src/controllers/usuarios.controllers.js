@@ -105,7 +105,6 @@ export const login = async(req, res) => {
         res.status(200).json({
             mensaje:"Login exitoso!",
             nombre:usuarioEncontrado.nombre,
-            email:usuarioEncontrado.email,
             rol:usuarioEncontrado.rol,
             id:usuarioEncontrado._id,
             token: token
