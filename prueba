@@ -1,0 +1,27 @@
+
+
+const pruebita = [{id:1, fecha:"2026", tipo:'Ingreso', concepto:'Fijo' , monto:20000}, {id:2, fecha:"2026", tipo:'Ingreso', concepto:'Fijo', monto:20000},
+    {id:4, fecha:"2026", tipo:'Ingreso', concepto:'variable' , monto:20000}, {id:3, fecha:"2026", tipo:'Ingreso', concepto:'Fijo',  monto:20000}, 
+    {id:3, fecha:"2026", tipo:'Gasto', concepto:'Fijo', monto:50000}
+]
+
+const totales = pruebita.reduce((acc, item) => {
+    const concepto = item.concepto
+    if(item.tipo === 'Ingreso'){
+        if(acc[concepto] === undefined){
+            acc[concepto] = 0
+        }
+        acc[concepto] += item.monto
+    } else {
+        if(acc[concepto] === undefined){
+            acc[concepto] = 0
+        }
+        acc[concepto] += item.monto
+    }
+
+}, [])
+
+console.log(totales);
+
+
+

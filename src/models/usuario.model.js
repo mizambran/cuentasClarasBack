@@ -39,6 +39,11 @@ const usuarioEsquema = new Schema({
         type:Boolean,
         required:true,
         default:true
+    },
+    plan:{
+        type:String,
+        enum:['Free', 'Pro', 'Premium'],
+        default:'Free'
     }
 }, {
     timestamps:true

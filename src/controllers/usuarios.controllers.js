@@ -1,5 +1,5 @@
 import { isValidObjectId } from 'mongoose'
-import Usuario from '../models/usuario.js'
+import Usuario from '../models/usuario.model.js'
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs'
 import generarJWT from '../middlewares/generarJWT.js'
 
@@ -105,7 +105,6 @@ export const login = async(req, res) => {
         res.status(200).json({
             mensaje:"Login exitoso!",
             nombre:usuarioEncontrado.nombre,
-            email:usuarioEncontrado.email,
             rol:usuarioEncontrado.rol,
             id:usuarioEncontrado._id,
             token: token
