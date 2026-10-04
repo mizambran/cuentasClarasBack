@@ -32,7 +32,9 @@ const transaccionEsquema = new Schema({
         required:true
     },
     descripcion:{
-        type:String
+        type:String,
+        minLength:0,
+        maxLength:20
     },
     estado:{
         type:String,

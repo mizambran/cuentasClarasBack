@@ -6,6 +6,6 @@ import transaccionValidacion from '../middlewares/transaccionValidacion.js'
 const router = Router()
 
 router.route('/').post(verificarJWT, transaccionValidacion, crearTransaccion).get(verificarJWT, listarTransacciones)
-router.route('/:id').get(verificarJWT, buscarTransaccionPorId).put(verificarJWT, editarTransaccion).delete(verificarJWT, eliminarTransaccion)
+router.route('/:id').get(verificarJWT, buscarTransaccionPorId).put(verificarJWT, transaccionValidacion, editarTransaccion).delete(verificarJWT, eliminarTransaccion)
 
 export default router
