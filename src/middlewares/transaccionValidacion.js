@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import resultadoValidacion from './resultadoValidacion.js'
 
 const transaccionValidacion = [
     
@@ -27,11 +28,13 @@ const transaccionValidacion = [
     body("descripcion")
         .optional() 
         .trim()
-        .isLength({ max: 200 }).withMessage("La descripción no puede superar los 200 caracteres"),
+        .isLength({ min:0, max: 20 }).withMessage("La descripción no puede superar los 20 caracteres"),
 
     body("estado")
         .optional() 
-        .isIn(['Pendiente', 'Completado']).withMessage("El estado debe ser 'Pendiente' o 'Completado'")
+        .isIn(['Pendiente', 'Completado']).withMessage("El estado debe ser 'Pendiente' o 'Completado'"),
+
+    resultadoValidacion
 ];
 
 export default transaccionValidacion
