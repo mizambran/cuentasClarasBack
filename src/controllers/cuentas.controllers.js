@@ -5,7 +5,7 @@ import Transaccion from '../models/transaccion.model.js'
 export const listarCuentas = async(req, res) => {
     try {
         const idUsuario = req.idUsuario
-        const cuentas = await Cuenta.find({usuario:idUsuario})
+        const cuentas = await Cuenta.find({usuario:idUsuario}).lean()
         res.status(200).json(cuentas)
     } catch (error) {
         console.error(error)
@@ -36,7 +36,7 @@ export const crearCuenta = async(req, res) => {
     try {
         const idUsuario = req.idUsuario
         const {nombre} = req.body
-        const yaExisteCuenta = await Cuenta.findOne({nombre:nombre, usuario:idUsuario})
+        const yaExisteCuenta = await Cuenta.findOne({usuario:idUsuario, nombre:nombre })
         if(yaExisteCuenta){
             return res.status(400).json({mensaje:"Ya tenes creada esta cuenta"})
         }
@@ -65,7 +65,7 @@ export const editarCuenta = async(req, res) => {
         }
         const idUsuario = req.idUsuario
         const {nombre, tipo, saldoInicial, activo} = req.body
-        const cuentaAEditar = await Cuenta.findOne({_id:idCuenta, usuario:idUsuario})
+        const cuentaAEditar = await Cuenta.findOne({usuario:idUsuario, _id:idCuenta })
         if(!cuentaAEditar){
             return res.status(404).json({mensaje:"No se encontró la cuenta que intentas editar"})
         }
@@ -103,7 +103,7 @@ export const eliminarCuenta = async(req, res) => {
         if(tieneOperaciones){
             return res.status(400).json({mensaje:"La cuenta tiene movimientos asociados"})
         }
-        const cuentaEncontrada = await Cuenta.findOne({_id:idCuenta, usuario:idUsuario})
+        const cuentaEncontrada = await Cuenta.findOne({usuario:idUsuario, _id:idCuenta })
         if(!cuentaEncontrada){
             return res.status(404).json({mensaje:"No se encontró la cuenta que intentas eliminar"})
         }

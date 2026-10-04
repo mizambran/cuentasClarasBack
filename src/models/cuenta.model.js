@@ -28,7 +28,7 @@ const cuentaEsquema = new Schema({
     }
 }, {timestamps:true})
 
-cuentaEsquema.index({ nombre: 1, usuario: 1 }, { unique: true });
+cuentaEsquema.index({ usuario: 1, nombre: 1  }, { unique: true });
 
 const Cuenta = mongoose.model('cuenta', cuentaEsquema)
 
