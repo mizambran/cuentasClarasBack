@@ -33,7 +33,7 @@ const categoriaEsquema = new Schema({
 })
 
 // Indice compuesto para evitar que un mismo usuario cree dos categorías llamadas igual con el mismo tipo
-categoriaEsquema.index({ nombre: 1, tipo: 1, usuario: 1 }, { unique: true });
+categoriaEsquema.index({ usuario: 1, nombre: 1, tipo: 1  }, { unique: true });
 
 const Categoria = mongoose.model('categoria', categoriaEsquema)
 
