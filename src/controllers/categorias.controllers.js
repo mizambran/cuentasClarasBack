@@ -12,9 +12,9 @@ export const crearCategoria = async(req, res) => {
     const idUsuario = req.idUsuario
    
     const existeCategoria = await Categoria.findOne({
+        usuario:idUsuario,
         nombre:nombre,
-        tipo:tipo,
-        usuario:idUsuario
+        tipo:tipo
     })
     if(existeCategoria){
         return res.status(400).json({mensaje:"Ya existe una categoría con este nombre"})
@@ -46,7 +46,7 @@ export const editarCategoria = async(req, res) => {
         }
         const idUsuario = req.idUsuario // el dueño de la categoría
         const {nombre, tipo, concepto} = req.body
-        const categoriaAEditar = await Categoria.findOne({_id:idCategoria, usuario:idUsuario})
+        const categoriaAEditar = await Categoria.findOne({ usuario:idUsuario, _id:idCategoria})
 
         if(!categoriaAEditar){
             return res.status(404).json({mensaje:"No se encontró la categoría que estas buscando"})
@@ -57,9 +57,9 @@ export const editarCategoria = async(req, res) => {
         const tipoEvaluar = tipo || categoriaAEditar.tipo;
 
         const categoriaDuplicada = await Categoria.findOne({
+            usuario: idUsuario,
             nombre: nombreEvaluar,
             tipo: tipoEvaluar,
-            usuario: idUsuario,
             _id: { $ne: idCategoria } //  Excluimos el ID de la categoría actual
         });
 
@@ -67,7 +67,7 @@ export const editarCategoria = async(req, res) => {
             return res.status(400).json({mensaje:`Ya tenes otra categoría de tipo: ${tipoEvaluar} llamada ${nombreEvaluar}`})
         }
 
-        const categoriaActualizada = await Categoria.findOneAndUpdate({_id:idCategoria, usuario:idUsuario}, req.body, {runValidators:true, returnDocument:'after'})
+        const categoriaActualizada = await Categoria.findOneAndUpdate({ usuario:idUsuario, _id:idCategoria}, req.body, {runValidators:true, returnDocument:'after'})
 
         res.status(200).json({ 
             mensaje: "Categoría editada con éxito!",
@@ -91,11 +91,11 @@ export const eliminarCategoria = async(req, res) => {
         }
         const idUsuario = req.idUsuario
         // antes de borrar validamos si tiene movimientos
-        const tieneOperaciones = await Transaccion.findOne({categoria:idCategoria, usuario:idUsuario})
+        const tieneOperaciones = await Transaccion.findOne({usuario:idUsuario, categoria:idCategoria })
         if(tieneOperaciones){
             return res.status(400).json({mensaje:`No se puede eliminar la categoría ya que tiene asociados movimientos`})
         }
-        const existeCategoria = await Categoria.findOneAndDelete({_id:idCategoria, usuario:req.idUsuario})
+        const existeCategoria = await Categoria.findOneAndDelete({usuario:idUsuario, _id:idCategoria })
         if(!existeCategoria){
             return res.status(404).json({mensaje:"No se encontró la categoría que intentas eliminar"})
         }
@@ -108,7 +108,7 @@ export const eliminarCategoria = async(req, res) => {
 
 export const listarCategoria = async(req, res) => {
     try {
-        const categorias = await Categoria.find({usuario:req.idUsuario})
+        const categorias = await Categoria.find({usuario:req.idUsuario}).lean()
         res.status(200).json(categorias)
     } catch (error) {
         console.error(error)
@@ -123,7 +123,7 @@ export const buscarCategoriaPorId = async(req, res) => {
             return res.status(400).json({mensaje:"El id es inválido"})
         }
         const idUsuario = req.idUsuario
-        const categoriaEncontrada = await Categoria.findOne({_id:idCategoria, usuario:idUsuario})
+        const categoriaEncontrada = await Categoria.findOne({usuario:idUsuario, _id:idCategoria })
         if(!categoriaEncontrada){
             return res.status(404).json({mensaje:"No se encontró la categoría que estas buscando"})
         }

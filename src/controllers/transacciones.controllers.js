@@ -6,7 +6,7 @@ import Cuenta from "../models/cuenta.model.js";
 export const listarTransacciones = async (req, res) => {
   try {
     const idUsuario = req.idUsuario;
-    const transacciones = await Transaccion.find({ usuario: idUsuario });
+    const transacciones = await Transaccion.find({ usuario: idUsuario }).lean();
     res.status(200).json(transacciones);
   } catch (error) {
     console.error(error);
@@ -22,8 +22,8 @@ export const buscarTransaccionPorId = async (req, res) => {
     }
     const idUsuario = req.idUsuario;
     const transaccionEncontrada = await Transaccion.findOne({
-      _id: idTransaccion,
       usuario: idUsuario,
+      _id: idTransaccion
     });
     if (!transaccionEncontrada) {
       return res
@@ -46,8 +46,8 @@ export const crearTransaccion = async (req, res) => {
 
     // validamos si que la categoria existe para el usuario
     const categoriaValida = await Categoria.findOne({
-      _id: categoria,
       usuario: idUsuario,
+      _id: categoria
     });
     if (!categoriaValida) {
       return res.status(400).json({ mensaje: "La categoría no existe" });
@@ -79,8 +79,8 @@ export const editarTransaccion = async (req, res) => {
     if (categoria) {
       // validamos si el usuario tiene la categoria creada
       const categoriaValida = await Categoria.findOne({
-        _id: categoria,
         usuario: idUsuario,
+        _id: categoria
       });
       if (!categoriaValida) {
         return res
@@ -91,7 +91,7 @@ export const editarTransaccion = async (req, res) => {
       }
     }
     if (cuenta) {
-        const cuentaValida = await Cuenta.findOne({_id:cuenta, usuario:idUsuario})
+        const cuentaValida = await Cuenta.findOne({ usuario:idUsuario, _id:cuenta})
         if(!cuentaValida){
             return res.status(400).json({
                 mensaje:`La cuenta: ${cuenta} no esta relacionada a tu usuario`
@@ -101,7 +101,7 @@ export const editarTransaccion = async (req, res) => {
 
     // Si pasó las validaciones (o si no mandó ni categoría ni cuenta), actualizamos tranquilos
         const transaccionEncontrada = await Transaccion.findOneAndUpdate(
-            {_id: idTransaccion, usuario: idUsuario},
+            {usuario: idUsuario, _id: idTransaccion },
             req.body,
             {runValidators: true, returnDocument: 'after'}
         );
@@ -131,8 +131,8 @@ export const eliminarTransaccion = async (req, res) => {
     }
     const idUsuario = req.idUsuario;
     const transaccionEncontrada = await Transaccion.findOneAndDelete({
-      _id: idTransaccion,
       usuario: idUsuario,
+      _id: idTransaccion
     });
     if (!transaccionEncontrada) {
       return res
