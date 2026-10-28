@@ -6,7 +6,10 @@ import Cuenta from "../models/cuenta.model.js";
 export const listarTransacciones = async (req, res) => {
   try {
     const idUsuario = req.idUsuario;
-    const transacciones = await Transaccion.find({ usuario: idUsuario }).lean();
+    const transacciones = await Transaccion.find({ usuario: idUsuario })
+    .populate('categoria', 'nombre')
+    .populate('cuenta', 'nombre')
+    .lean()
     res.status(200).json(transacciones);
   } catch (error) {
     console.error(error);
