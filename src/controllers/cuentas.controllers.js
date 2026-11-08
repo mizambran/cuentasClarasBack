@@ -113,3 +113,43 @@ export const eliminarCuenta = async(req, res) => {
         res.status(500).json({mensaje:"Ocurrió un error, no se pudo eliminar la cuenta"})
     }
 }
+
+
+/* Para reportes - Saldos */
+
+export const listarCuentasConSaldos = async (req, res) => {
+  try {
+     const cuentas = await Cuenta.find({ usuario: req.idUsuario }).lean();
+    
+    const transacciones = await Transaccion.find({ usuario: req.idUsuario });
+
+    //  Mapeamos las cuentas para calcular el saldo en tiempo real
+    const cuentasConSaldo = cuentas.map(cuenta => {
+      let saldoReal = cuenta.saldoInicio || 0;
+
+      // Filtramos solo los movimientos que pertenezcan a esta cuenta específica
+      const movimientosCuenta = transacciones.filter(
+        tran => tran.cuenta.toString() === cuenta._id.toString()
+      );
+
+      // Sumamos o restamos según el tipo
+      movimientosCuenta.forEach(mov => {
+        if (mov.tipo === 'Ingreso') {
+          saldoReal += mov.monto;
+        } else if (mov.tipo === 'Gasto') {
+          saldoReal -= mov.monto;
+        }
+      });
+
+      // Retornamos la cuenta con su nueva propiedad 'saldoActual'
+      return {
+        ...cuenta,
+        saldoActual: saldoReal
+      };
+    });
+
+    res.status(200).json(cuentasConSaldo);
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al cargar las cuentas", error: error.message });
+  }
+};
