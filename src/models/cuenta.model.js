@@ -21,6 +21,10 @@ const cuentaEsquema = new Schema({
         required:true,
         default:0
     },
+    fechaSaldoInicio:{
+        type:Date,
+        default: Date.now
+    },
     activo:{
         type:Boolean,
         required:true,
