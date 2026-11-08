@@ -119,9 +119,9 @@ export const eliminarCuenta = async(req, res) => {
 
 export const listarCuentasConSaldos = async (req, res) => {
   try {
-     const cuentas = await Cuenta.find({ usuario: req.usuario.id }).lean();
+     const cuentas = await Cuenta.find({ usuario: req.idUsuario }).lean();
     
-    const transacciones = await Transaccion.find({ usuario: req.usuario.id });
+    const transacciones = await Transaccion.find({ usuario: req.idUsuario });
 
     //  Mapeamos las cuentas para calcular el saldo en tiempo real
     const cuentasConSaldo = cuentas.map(cuenta => {
