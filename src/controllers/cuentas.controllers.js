@@ -99,11 +99,12 @@ export const eliminarCuenta = async(req, res) => {
             return res.status(400).json({mensaje:"El id es inválido"})
         }
         const idUsuario = req.idUsuario
+        console.log("Intentando borrar", idCuenta, idUsuario)
         const tieneOperaciones = await Transaccion.findOne({usuario:idUsuario, cuenta:idCuenta})
         if(tieneOperaciones){
             return res.status(400).json({mensaje:"La cuenta tiene movimientos asociados"})
         }
-        const cuentaEncontrada = await Cuenta.findOne({usuario:idUsuario, _id:idCuenta })
+        const cuentaEncontrada = await Cuenta.findOneAndDelete({usuario:idUsuario, _id:idCuenta })
         if(!cuentaEncontrada){
             return res.status(404).json({mensaje:"No se encontró la cuenta que intentas eliminar"})
         }
@@ -127,6 +128,10 @@ export const listarCuentasConSaldos = async (req, res) => {
     const cuentasConSaldo = cuentas.map(cuenta => {
       let saldoReal = cuenta.saldoInicio || 0;
 
+      let totalPorMov = 0
+
+      let totalTraspasos = 0
+
       // Filtramos solo los movimientos que pertenezcan a esta cuenta específica
       const movimientosCuenta = transacciones.filter(
         tran => tran.cuenta.toString() === cuenta._id.toString()
@@ -141,9 +146,22 @@ export const listarCuentasConSaldos = async (req, res) => {
         }
       });
 
+      // Sumamos o restamos según el tipo para el total de mov
+      movimientosCuenta.forEach(mov => {
+        if(mov.tipo === "Ingreso"){
+            totalPorMov += mov.monto
+        } else if(mov.tipo === "Gasto"){
+            totalPorMov -= mov.monto
+        }
+      })
+
+      // sumamos o restamos según el tipo para traspasos entre cuentas
+      // Evaluar si agrego un schema o en la misma cuenta agrego la propiedad traspasos
+
       // Retornamos la cuenta con su nueva propiedad 'saldoActual'
       return {
         ...cuenta,
+        movimientos: totalPorMov,
         saldoActual: saldoReal
       };
     });
@@ -153,3 +171,4 @@ export const listarCuentasConSaldos = async (req, res) => {
     res.status(500).json({ mensaje: "Error al cargar las cuentas", error: error.message });
   }
 };
+
