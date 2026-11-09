@@ -16,6 +16,12 @@ const cuentaEsquema = new Schema({
         enum:['Efectivo', 'Tarjeta de Crédito', 'Tarjeta de Débito', 'Cuenta Bancaria', 'Billetera Virtual'],
         required:true
     },
+    moneda:{
+        type:String,
+        enum:['ARS', 'USD', 'EUR', 'BRL'],
+        required:true,
+        default:'ARS'
+    },
     saldoInicio:{
         type:Number,
         required:true,
